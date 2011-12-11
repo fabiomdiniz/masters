@@ -100,7 +100,10 @@ namespace protomasters
         /// <param name="texture">Imagem (Sprite Sheet)</param>
         /// <param name="columns">Quantidade de colunas</param>
         /// <param name="rows">Quantidade de linhas</param>
-        public AnimatedSprite() { }
+        public AnimatedSprite(string defaultKey) 
+        {
+            this.animationKey = defaultKey;
+        }
 
         #endregion
 

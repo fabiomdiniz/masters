@@ -7,19 +7,31 @@ namespace protomasters
 {
     class Enemy : Entity
     {
-        public Enemy(float speed = 8.0f, float health = 100.0f, float strength = 10.0f) :
-            base(speed, health, strength) { }
+        public bool inAttack = false;
+        public int meleeSpeed;
+
+        public Enemy(float speed = 8.0f, float health = 100.0f, float strength = 10.0f, int meleeSpeed = 500) :
+            base("WalkingLeft", speed, health, strength) 
+        {
+            this.meleeSpeed = meleeSpeed;
+            startAction = DateTime.Now;
+        }
 
         public void UpdateAction(Player player)
         {
             int direction;
-
-            if (this.animations.Rect().Intersects(player.animations.Rect()))
+            TimeSpan delta = (DateTime.Now - startAction);
+            inAttack = delta.TotalMilliseconds < meleeSpeed;
+            if (inAttack)
+                animations.PlayAnimation(animations.AnimationKey);
+            else if (this.animations.Rect().Intersects(player.animations.Rect()))
             {
                 if (this.animations.AnimationKey.IndexOf("Attack") == -1)
                 {
                     System.Random generator = new System.Random();
                     String attack;
+                    inAttack = true;
+                    startAction = DateTime.Now;
                     if (generator.NextDouble() > 0.3)
                         attack = "Attack1";
                     else

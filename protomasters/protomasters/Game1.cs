@@ -39,6 +39,8 @@ namespace protomasters
 
         EnemiesManager enemiesManager = new EnemiesManager();
 
+        SpriteFont font;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -57,6 +59,8 @@ namespace protomasters
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            font = Content.Load<SpriteFont>("infoFont");
 
             // Cria o personagem
             player = new Player(8.0f);
@@ -88,6 +92,16 @@ namespace protomasters
             // Desenha o personagem
             player.animations.Draw(spriteBatch);
             enemiesManager.Draw(spriteBatch);
+            spriteBatch.DrawString(font, "Health: " + player.health, 
+                new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
+            
+            for(int i = 0; i < enemiesManager.enemies.Count; i++)
+            {
+                spriteBatch.DrawString(font, "Enemy " + (i+1) + ": " + enemiesManager.enemies[i].health,
+                new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + GraphicsDevice.Viewport.Width - 300, 
+                    GraphicsDevice.Viewport.TitleSafeArea.Y + i*30), Color.White);
+                
+            }
             spriteBatch.End();
 
             base.Draw(gameTime);

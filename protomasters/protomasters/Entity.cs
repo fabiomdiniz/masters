@@ -20,12 +20,12 @@ namespace protomasters
 
         public DateTime startAction;
 
-        public Entity(float speed = 8.0f, float health = 100.0f, float strength = 10.0f)
+        public Entity(string defaultKey, float speed = 8.0f, float health = 100.0f, float strength = 10.0f)
         {
             this.speed = speed;
             this.health = health;
             this.strength = strength;
-            this.animations = new AnimatedSprite();
+            this.animations = new AnimatedSprite(defaultKey);
         }
     }
 }

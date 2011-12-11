@@ -113,6 +113,8 @@ namespace protomasters
         /// </summary>
         Player player;
 
+        EnemiesManager enemiesManager = new EnemiesManager();
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -136,8 +138,8 @@ namespace protomasters
 
             player.animations.AddAnimation("Stoped", Content.Load<Texture2D>("zero_walking"), 16, 1, 0, 1);
             player.animations.AddAnimation("Walking", Content.Load<Texture2D>("zero_walking"), 16, 1, 0, 16);
-            player.animations.AddAnimation("Attack1", Content.Load<Texture2D>("zero_attack_1"), 4, 1, 0, 4);
-            player.animations.AddAnimation("Attack2", Content.Load<Texture2D>("zero_attack_2"), 4, 1, 0, 4);
+            player.animations.AddAnimation("Attack1", Content.Load<Texture2D>("zero_attack_1"), 1, 1, 0, 1);
+            player.animations.AddAnimation("Attack2", Content.Load<Texture2D>("zero_attack_2"), 1, 1, 0, 1);
             
             /*
             // Baixo
@@ -240,7 +242,7 @@ namespace protomasters
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DarkCyan);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             // Desenha o personagem
             player.animations.Draw(spriteBatch);

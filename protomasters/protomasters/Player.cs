@@ -8,19 +8,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace protomasters
 {
-    class Player
+    class Player : Entity
     {
-        public float speed;
-
-        public AnimatedSprite animations;
-        
-        public Vector2 last_movement;
-
-        public Player(float speed)
-        {
-            this.speed = speed;
-            this.animations = new AnimatedSprite();
-        }
+        public Player(float speed = 8.0f, float health = 100.0f) :
+            base(speed, health) { }
 
         public void UpdateAction(GamePadState state, GraphicsDevice gdevice)
         {

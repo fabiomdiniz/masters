@@ -12,7 +12,10 @@ namespace protomasters
     {
         GamePadState previousGamePadState;
         bool inAttack = false;
+        public string inDamage = "";
+        
         int meleeSpeed;
+        public float enemyStr;
 
         public Player(float speed = 8.0f, float health = 100.0f, int meleeSpeed = 300) :
             base("StopedRight", speed, health) 
@@ -28,7 +31,25 @@ namespace protomasters
             TimeSpan delta = (DateTime.Now-startAction);
             
             inAttack = delta.TotalMilliseconds < meleeSpeed;
-            if (inAttack)
+
+            if (inDamage != "")
+            {
+                if ((inDamage == "Attack1" &&
+                    state.Buttons.X == ButtonState.Pressed) ||(inDamage == "Attack2" &&
+                    state.Buttons.Y == ButtonState.Pressed))
+                {
+                    inDamage = "";
+                }
+                else
+                {
+                    if (last_movement.X > 0.0)
+                        animations.PlayAnimation("DamageRight");
+                    else
+                        animations.PlayAnimation("DamageLeft");
+                    health -= enemyStr;
+                }
+            }
+            else if (inAttack)
                 animations.PlayAnimation(animations.AnimationKey);
             else if (previousGamePadState.Buttons.X == ButtonState.Released &&
                     state.Buttons.X == ButtonState.Pressed)

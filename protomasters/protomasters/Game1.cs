@@ -71,6 +71,7 @@ namespace protomasters
             player.animations.AddAnimation("Walking", Content.Load<Texture2D>("zero_walking"), 16, 1, 0, 16);
             player.animations.AddAnimation("Attack1", Content.Load<Texture2D>("zero_attack_1"), 1, 1, 0, 1, false);
             player.animations.AddAnimation("Attack2", Content.Load<Texture2D>("zero_attack_2"), 1, 1, 0, 1, false);
+            player.animations.AddAnimation("Damage", Content.Load<Texture2D>("zero_damage"), 1, 1, 0, 1, false);
 
             enemiesManager.SpawnGenericEnemy(new Vector2(300, GraphicsDevice.Viewport.Height-200), Content); 
         

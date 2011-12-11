@@ -10,7 +10,9 @@ namespace protomasters
         public bool inAttack = false;
         public int meleeSpeed;
 
-        public Enemy(float speed = 8.0f, float health = 100.0f, float strength = 10.0f, int meleeSpeed = 500) :
+        public bool inDamage = false;
+
+        public Enemy(float speed = 8.0f, float health = 100.0f, float strength = 1.0f, int meleeSpeed = 500) :
             base("WalkingLeft", speed, health, strength) 
         {
             this.meleeSpeed = meleeSpeed;
@@ -40,6 +42,8 @@ namespace protomasters
                         animations.PlayAnimation(attack + "Right");
                     else
                         animations.PlayAnimation(attack + "Left");
+                    player.inDamage = attack;
+                    player.enemyStr = strength;
                 }
                 else
                 {

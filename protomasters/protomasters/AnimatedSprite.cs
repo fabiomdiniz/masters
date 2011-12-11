@@ -38,7 +38,9 @@ namespace protomasters
         /// Nome da animação
         /// </summary>
         private string animationKey;
-        public string AnimationKey
+        public string oldAnimationKey = "";
+
+            public string AnimationKey
         {
             get { return this.animationKey; }
         }
@@ -46,7 +48,7 @@ namespace protomasters
         /// <summary>
         /// Cor de desenho da imagem
         /// </summary>
-        protected Color color = Color.White;
+        public Color color = Color.White;
 
         /// <summary>
         /// Rotação da imagem
@@ -67,6 +69,14 @@ namespace protomasters
             set { this.flip = value; }
         }
         protected SpriteEffects flip = SpriteEffects.None;
+
+        public Rectangle Rect()
+        {
+            return new Rectangle((int)position.X,
+                                 (int)position.Y,
+                                 frameWidth,
+                                 frameHeight);
+        }
 
         /// <summary>
         /// Layer de desenho
@@ -112,6 +122,7 @@ namespace protomasters
                 }
                 else
                 {
+                    animationKey = this.oldAnimationKey;
                     frameIndex = (int)MathHelper.Min(frameIndex + 1, spriteSheets[AnimationKey].animation.FramesCount - 1);
                 }
                 timeElapsed = 0.0f;
@@ -148,10 +159,10 @@ namespace protomasters
         /// </summary>
         /// <param name="name">Nome chave da animação</param>
         /// <param name="newAnimation">Animação definida</param>
-        public void AddAnimation(string name, Texture2D texture, int columns, int rows, int startFrame, int framesCount)
+        public void AddAnimation(string name, Texture2D texture, int columns, int rows, int startFrame, int framesCount, bool isloop = true)
         {
-            spriteSheets.Add(name + "Right", new SpriteSheet(texture, columns, rows, startFrame, framesCount));
-            spriteSheets.Add(name + "Left", new SpriteSheet(texture, columns, rows, startFrame, framesCount, SpriteEffects.FlipHorizontally));
+            spriteSheets.Add(name + "Right", new SpriteSheet(texture, columns, rows, startFrame, framesCount,SpriteEffects.None, isloop));
+            spriteSheets.Add(name + "Left", new SpriteSheet(texture, columns, rows, startFrame, framesCount, SpriteEffects.FlipHorizontally, isloop));
             this.frameWidth = texture.Width / columns;
             this.frameHeight = texture.Height / rows;
         }
@@ -170,6 +181,7 @@ namespace protomasters
                 return;
 
             // Inicia uma nova animação
+            this.oldAnimationKey = this.animationKey;
             this.animationKey = name;
             this.frameIndex = 0;
             this.timeElapsed = 0.0f;

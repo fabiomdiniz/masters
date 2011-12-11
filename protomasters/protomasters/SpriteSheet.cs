@@ -38,7 +38,7 @@ namespace protomasters
 
         public SpriteEffects flip = SpriteEffects.None;
 
-        public SpriteSheet(Texture2D texture, int columns, int rows, int startFrame, int framesCount, SpriteEffects flip = SpriteEffects.None)
+        public SpriteSheet(Texture2D texture, int columns, int rows, int startFrame, int framesCount, SpriteEffects flip = SpriteEffects.None, bool isloop = true)
         {
             this.texture = texture;
             this.position = new Vector2();
@@ -52,7 +52,7 @@ namespace protomasters
                         i * frameHeight, frameWidth, frameHeight));
 
             this.origin = new Vector2(frameWidth / 2, frameHeight / 2);
-            this.animation = new Animation(this.frames, startFrame, framesCount);
+            this.animation = new Animation(this.frames, startFrame, framesCount, isloop);
             this.flip = flip;
         }
     }

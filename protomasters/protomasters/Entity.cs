@@ -18,6 +18,8 @@ namespace protomasters
         
         public Vector2 last_movement;
 
+        public DateTime startAction;
+
         public Entity(float speed = 8.0f, float health = 100.0f, float strength = 10.0f)
         {
             this.speed = speed;

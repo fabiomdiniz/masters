@@ -61,12 +61,13 @@ namespace protomasters
         /// <param name="frameSize">Tamanho do quadro</param>
         /// <param name="startFrame">Quadro inicial</param>
         /// <param name="framesCount">Quantidade de quadros</param>
-        public Animation(List<Rectangle> frames, int startFrame, int framesCount)
+        public Animation(List<Rectangle> frames, int startFrame, int framesCount, bool isLooping = true)
         {
             this.framesCount = framesCount;
             // Armazena os quadros referêntes a esta animação
             for (int i = startFrame; i < startFrame + framesCount; i++)
                 Frames.Add(frames[i]);
+            this.isLooping = isLooping;
         }
 
         #endregion

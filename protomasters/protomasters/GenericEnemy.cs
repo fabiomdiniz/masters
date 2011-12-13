@@ -20,7 +20,7 @@ namespace protomasters
             this.animations.AddAnimation("Attack2", content.Load<Texture2D>("zero_attack_2"), 1, 1, 0, 1, false);
             
             System.Random generator = new System.Random();
-            this.meleeSpeed = generator.Next(300, 600);
+            this.meleeTime = (double)generator.Next(11000, 12000);
         }
     }
 }

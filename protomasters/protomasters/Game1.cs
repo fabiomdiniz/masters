@@ -92,6 +92,14 @@ namespace protomasters
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             // Desenha o personagem
             player.animations.Draw(spriteBatch);
+
+            if (player.Deflected())
+            {
+                spriteBatch.DrawString(font, "DEFLECTED!" ,
+                new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y+30), Color.White);
+            
+            }
+            
             enemiesManager.Draw(spriteBatch);
             spriteBatch.DrawString(font, "Health: " + player.health, 
                 new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);

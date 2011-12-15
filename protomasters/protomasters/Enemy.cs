@@ -9,7 +9,9 @@ namespace protomasters
     class Enemy : Entity
     {
         public double inAction = 0.0;
+        public string inAttack = "";
         public double meleeTime;
+        public int parryTime = 500;
 
         public bool inDamage = false;
 
@@ -29,22 +31,38 @@ namespace protomasters
                 animations.PlayAnimation(animations.AnimationKey);
             else if (this.animations.Rect().Intersects(player.animations.Rect()))
             {
-                if (this.animations.AnimationKey.IndexOf("Attack") == -1)
+                if (inAttack == "")
                 {
                     System.Random generator = new System.Random();
-                    String attack;
-                    inAction = meleeTime;
+                    inAction = parryTime;
                     startAction = DateTime.Now;
                     if (generator.NextDouble() > 0.3)
-                        attack = "Attack1";
+                    {
+                        inAttack = "Attack1";
+                        this.animations.color = Color.Blue;
+                    }
                     else
-                        attack = "Attack2";
+                    {
+                        inAttack = "Attack2";
+                        this.animations.color = Color.Yellow;
+                    }
                     if (last_movement.X > 0.0)
-                        animations.PlayAnimation(attack + "Right");
+                        animations.PlayAnimation("StopedRight");
                     else
-                        animations.PlayAnimation(attack + "Left");
-                    player.inDamage = attack;
+                        animations.PlayAnimation("StopedLeft");
+
+                }
+                else if (inAction == 0.0)
+                {
+                    player.inDamage = inAttack;
                     player.enemyStr = strength;
+                    inAction = meleeTime;
+                    if (last_movement.X > 0.0)
+                        animations.PlayAnimation(inAttack+"Right");
+                    else
+                        animations.PlayAnimation(inAttack + "Left");
+                    inAttack = "";
+                    this.animations.color = Color.Black;
                 }
                 else
                 {

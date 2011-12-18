@@ -55,22 +55,14 @@ namespace protomasters
 
             if (inDamage != "")
             {
-                if ((inDamage == "Attack1" && pressedAttack1()) ||
-                    (inDamage == "Attack2" && pressedAttack2()))
-                {
-                    deflected = true;
-                }
+                if (last_movement.X > 0.0)
+                    animations.PlayAnimation("DamageRight");
                 else
-                {
-                    if (last_movement.X > 0.0)
-                        animations.PlayAnimation("DamageRight");
-                    else
-                        animations.PlayAnimation("DamageLeft");
-                    health -= enemyStr;
-                    inDamage = "";
-                    inAction = 300.0;
-                    startAction = DateTime.Now;
-                }
+                    animations.PlayAnimation("DamageLeft");
+                health -= enemyStr;
+                inDamage = "";
+                inAction = 300.0;
+                startAction = DateTime.Now;
             }
             else if (inAction > 0)
                 animations.PlayAnimation(animations.AnimationKey);
@@ -118,6 +110,16 @@ namespace protomasters
             // Make sure that the player does not go out of bounds
             animations.position.X = MathHelper.Clamp(animations.position.X, 0, gdevice.Viewport.Width - animations.frameWidth);
             animations.position.Y = MathHelper.Clamp(animations.position.Y, 0, gdevice.Viewport.Height - animations.frameHeight);
+        }
+
+        public void parry()
+        {
+            if (last_movement.X > 0.0)
+                animations.PlayAnimation("ParryRight");
+            else
+                animations.PlayAnimation("ParryLeft");
+            inAction = 500.0;
+            startAction = DateTime.Now;
         }
     }
 }

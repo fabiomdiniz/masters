@@ -11,7 +11,7 @@ namespace protomasters
         public double inAction = 0.0;
         public string inAttack = "";
         public double meleeTime;
-        public int parryTime = 500;
+        public int parryTime = 4000;
 
         public bool inDamage = false;
 
@@ -57,6 +57,7 @@ namespace protomasters
                     player.inDamage = inAttack;
                     player.enemyStr = strength;
                     inAction = meleeTime;
+                    startAction = DateTime.Now;
                     if (last_movement.X > 0.0)
                         animations.PlayAnimation(inAttack+"Right");
                     else
@@ -95,6 +96,18 @@ namespace protomasters
 
             animations.old_position = animations.position;
             // Make sure that the player does not go out of bounds
+        }
+
+        public void parried()
+        {
+            if (last_movement.X > 0.0)
+                animations.PlayAnimation("ParriedRight");
+            else
+                animations.PlayAnimation("ParriedLeft");
+            inAttack = "";
+            inAction = 500.0;
+            this.animations.color = Color.Black;
+            startAction = DateTime.Now;
         }
     }
 }

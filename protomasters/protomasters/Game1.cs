@@ -72,6 +72,8 @@ namespace protomasters
             player.animations.AddAnimation("Attack1", Content.Load<Texture2D>("zero_attack_1"), 1, 1, 0, 1, false);
             player.animations.AddAnimation("Attack2", Content.Load<Texture2D>("zero_attack_2"), 1, 1, 0, 1, false);
             player.animations.AddAnimation("Damage", Content.Load<Texture2D>("zero_damage"), 1, 1, 0, 1, false);
+            player.animations.AddAnimation("Parry", Content.Load<Texture2D>("zero_parry"), 1, 1, 0, 1, false);
+            player.animations.AddAnimation("Parried", Content.Load<Texture2D>("zero_parried"), 1, 1, 0, 1, false);
 
             enemiesManager.SpawnGenericEnemy(new Vector2(300, GraphicsDevice.Viewport.Height-200), Content); 
         
@@ -79,8 +81,8 @@ namespace protomasters
 
         protected override void Update(GameTime gameTime)
         {
-            player.UpdateAction(GamePad.GetState(PlayerIndex.One), GraphicsDevice);
             enemiesManager.UpdateAction(player);
+            player.UpdateAction(GamePad.GetState(PlayerIndex.One), GraphicsDevice);
             player.animations.Update(gameTime);
             enemiesManager.Update(gameTime);
             base.Update(gameTime);

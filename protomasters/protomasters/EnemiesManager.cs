@@ -42,6 +42,15 @@ namespace protomasters
             foreach (Enemy enemy in enemies)
             {
                 enemy.UpdateAction(player);
+                Console.WriteLine(enemy.inAttack);
+                Console.WriteLine(player.pressedAttack1());
+                if ((player.pressedAttack1() && enemy.inAttack == "Attack1") ||
+                    (player.pressedAttack2() && enemy.inAttack == "Attack2"))
+                {
+                    enemy.inAttack = "";
+                    player.parry();
+                    enemy.parried();
+                }
             }
         }
     }

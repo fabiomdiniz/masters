@@ -20,6 +20,7 @@ namespace protomasters
             this.animations.AddAnimation("Attack2", content.Load<Texture2D>("zero_attack_2"), 1, 1, 0, 1, false);
             this.animations.AddAnimation("Parry", content.Load<Texture2D>("zero_parry"), 1, 1, 0, 1, false);
             this.animations.AddAnimation("Parried", content.Load<Texture2D>("zero_parried"), 1, 1, 0, 1, false);
+            this.animations.AddAnimation("Broke", content.Load<Texture2D>("zero_broke"), 1, 1, 0, 1, false);
 
             System.Random generator = new System.Random();
             this.meleeTime = (double)generator.Next(11000, 12000);

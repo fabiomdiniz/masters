@@ -27,5 +27,13 @@ namespace protomasters
             this.strength = strength;
             this.animations = new AnimatedSprite(defaultKey);
         }
+
+        public string getSense()
+        {
+            if (last_movement.X > 0.0)
+                return "Right";
+            else
+                return "Left";
+        }
     }
 }

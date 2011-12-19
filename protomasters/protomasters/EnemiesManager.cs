@@ -42,16 +42,33 @@ namespace protomasters
             foreach (Enemy enemy in enemies)
             {
                 enemy.UpdateAction(player);
-                Console.WriteLine(enemy.inAttack);
-                Console.WriteLine(player.pressedAttack1());
-                if ((player.pressedAttack1() && enemy.inAttack == "Attack1") ||
-                    (player.pressedAttack2() && enemy.inAttack == "Attack2"))
-                {
-                    enemy.inAttack = "";
-                    player.parry();
-                    enemy.parried();
-                }
+                if(!enemy.unparriable)
+                    check_parry(enemy, player);
             }
+        }
+
+        private void check_parry(Enemy enemy, Player player)
+        {
+            bool parry = false;
+            bool misparry = false;
+            if (player.pressedAttack1())
+            {
+                parry = (enemy.inAttack == "Attack1");
+                misparry = !parry;
+            }
+            else if (player.pressedAttack2())
+            {
+                parry = (enemy.inAttack == "Attack2");
+                misparry = !parry;
+            }
+            if (parry)
+            {
+                enemy.inAttack = "";
+                player.parry();
+                enemy.parried();
+                Console.WriteLine(enemy.parryCount);
+            }
+            enemy.unparriable = misparry;
         }
     }
 }

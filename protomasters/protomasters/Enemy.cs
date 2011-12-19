@@ -11,9 +11,12 @@ namespace protomasters
         public double inAction = 0.0;
         public string inAttack = "";
         public double meleeTime;
-        public int parryTime = 4000;
+        public int parryTime = 6000;
+        public int parryCount = 0;
+        private int parryMax = 3;
 
         public bool inDamage = false;
+        public bool unparriable = false;
 
         public Enemy(float speed = 8.0f, float health = 100.0f, float strength = 1.0f, int meleeSpeed = 500) :
             base("WalkingLeft", speed, health, strength) 
@@ -31,7 +34,11 @@ namespace protomasters
                 animations.PlayAnimation(animations.AnimationKey);
             else if (this.animations.Rect().Intersects(player.animations.Rect()))
             {
-                if (inAttack == "")
+                if (parryCount >= parryMax)
+                {
+                    broke();
+                }
+                else if (inAttack == "")
                 {
                     System.Random generator = new System.Random();
                     inAction = parryTime;
@@ -46,29 +53,12 @@ namespace protomasters
                         inAttack = "Attack2";
                         this.animations.color = Color.Yellow;
                     }
-                    if (last_movement.X > 0.0)
-                        animations.PlayAnimation("StopedRight");
-                    else
-                        animations.PlayAnimation("StopedLeft");
-
+                    animations.PlayAnimation("Stoped" + getSense());
                 }
                 else if (inAction == 0.0)
-                {
-                    player.inDamage = inAttack;
-                    player.enemyStr = strength;
-                    inAction = meleeTime;
-                    startAction = DateTime.Now;
-                    if (last_movement.X > 0.0)
-                        animations.PlayAnimation(inAttack+"Right");
-                    else
-                        animations.PlayAnimation(inAttack + "Left");
-                    inAttack = "";
-                    this.animations.color = Color.Black;
-                }
+                    successfullAttack(player);
                 else
-                {
                     animations.PlayAnimation(animations.AnimationKey);
-                }
             }
             else
             {
@@ -86,28 +76,44 @@ namespace protomasters
                 this.animations.position.X += direction * speed;
 
                 if (this.animations.Rect().Intersects(player.animations.Rect()))
-                {
-                    if (last_movement.X > 0.0)
-                        animations.PlayAnimation("StopedRight");
-                    else
-                        animations.PlayAnimation("StopedLeft");
-                }
+                   animations.PlayAnimation("Stoped" + getSense());
             }
 
             animations.old_position = animations.position;
             // Make sure that the player does not go out of bounds
         }
 
+        private void successfullAttack(Player player)
+        {
+            player.inDamage = inAttack;
+            player.enemyStr = strength;
+            inAction = meleeTime;
+            startAction = DateTime.Now;
+            animations.PlayAnimation(inAttack + getSense());
+            inAttack = "";
+            unparriable = false;
+            this.animations.color = Color.Black;
+            parryCount = 0;
+        }
+
         public void parried()
         {
-            if (last_movement.X > 0.0)
-                animations.PlayAnimation("ParriedRight");
-            else
-                animations.PlayAnimation("ParriedLeft");
+            animations.PlayAnimation("Parried" + getSense());
             inAttack = "";
             inAction = 500.0;
             this.animations.color = Color.Black;
             startAction = DateTime.Now;
+            parryCount += 1;
         }
+        public void broke()
+        {
+            animations.PlayAnimation("Broke" + getSense());
+            parryCount = 0;
+            inAttack = "";
+            inAction = 5500.0;
+            this.animations.color = Color.Black;
+            startAction = DateTime.Now;
+        }
+
     }
 }

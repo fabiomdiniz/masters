@@ -11,11 +11,16 @@ namespace protomasters
     class Player : Entity
     {
         GamePadState previousGamePadState;
-        double inAction = 0.0;
-        public string inDamage = "";
+
         
         double meleeSpeed;
-        public float enemyStr;
+
+        public bool canAttack = false;
+
+        public bool pressedAttack()
+        {
+            return pressedAttack1() || pressedAttack2();
+        }
 
         public bool pressedAttack1()
         {
@@ -39,8 +44,9 @@ namespace protomasters
         private bool deflected;
 
         public Player(float speed = 8.0f, float health = 100.0f, double meleeSpeed = 300.0) :
-            base("StopedRight", speed, health) 
+            base("StopedRight", speed, health, 100.0f) 
         {
+            color = Color.White;
             previousGamePadState = GamePad.GetState(PlayerIndex.One);
             startAction = DateTime.Now;
             this.meleeSpeed = meleeSpeed;
@@ -55,18 +61,11 @@ namespace protomasters
 
             if (inDamage != "")
             {
-                if (last_movement.X > 0.0)
-                    animations.PlayAnimation("DamageRight");
-                else
-                    animations.PlayAnimation("DamageLeft");
-                health -= enemyStr;
-                inDamage = "";
-                inAction = 300.0;
-                startAction = DateTime.Now;
+                damaged();
             }
             else if (inAction > 0)
                 animations.PlayAnimation(animations.AnimationKey);
-            else if (pressedAttack1())
+            else if (pressedAttack1() && canAttack)
             {
                 if (last_movement.X > 0.0)
                     animations.PlayAnimation("Attack1Right");
@@ -75,7 +74,7 @@ namespace protomasters
                 startAction = DateTime.Now;
                 inAction = meleeSpeed;
             }
-            else if (pressedAttack2())
+            else if (pressedAttack2() && canAttack)
             {
                 if (last_movement.X > 0.0)
                     animations.PlayAnimation("Attack2Right");

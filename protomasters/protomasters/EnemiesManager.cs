@@ -39,11 +39,13 @@ namespace protomasters
 
         public void UpdateAction(Player player)
         {
-            foreach (Enemy enemy in enemies)
+            for(int i = 0; i < enemies.Count; ++i)
             {
-                enemy.UpdateAction(player);
-                if(!enemy.unparriable)
-                    check_parry(enemy, player);
+                enemies[i].UpdateAction(player);
+                if (!enemies[i].unparriable)
+                    check_parry(enemies[i], player);
+                if (enemies[i].health <= 0)
+                    enemies.Remove(enemies[i]);
             }
         }
 

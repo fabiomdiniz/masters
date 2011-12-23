@@ -125,7 +125,7 @@ namespace protomasters
                 }
                 else
                 {
-                    animationKey = this.oldAnimationKey;
+                    //animationKey = this.oldAnimationKey;
                     frameIndex = (int)MathHelper.Min(frameIndex + 1, spriteSheets[AnimationKey].animation.FramesCount - 1);
                 }
                 timeElapsed = 0.0f;

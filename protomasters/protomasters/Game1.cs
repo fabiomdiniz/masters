@@ -40,6 +40,7 @@ namespace protomasters
         EnemiesManager enemiesManager = new EnemiesManager();
 
         SpriteFont font;
+        Texture2D background;
 
         public Game1()
         {
@@ -61,6 +62,7 @@ namespace protomasters
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             font = Content.Load<SpriteFont>("infoFont");
+            background = Content.Load<Texture2D>("background");
 
             // Cria o personagem
             player = new Player(8.0f);
@@ -76,7 +78,7 @@ namespace protomasters
             player.animations.AddAnimation("Parried", Content.Load<Texture2D>("zero_parried"), 1, 1, 0, 1, false);
             player.animations.AddAnimation("Broke", Content.Load<Texture2D>("zero_broke"), 1, 1, 0, 1, false);
 
-            enemiesManager.SpawnGenericEnemy(new Vector2(300, GraphicsDevice.Viewport.Height-200), Content); 
+            enemiesManager.SpawnGenericEnemy(new Vector2(700, GraphicsDevice.Viewport.Height-200), Content); 
         
         }
 
@@ -85,34 +87,47 @@ namespace protomasters
             enemiesManager.UpdateAction(player);
             player.UpdateAction(GamePad.GetState(PlayerIndex.One), GraphicsDevice);
             player.animations.Update(gameTime);
-            enemiesManager.Update(gameTime);
+            if (enemiesManager.enemies.Count == 0)
+                enemiesManager.SpawnGenericEnemy(new Vector2(700, GraphicsDevice.Viewport.Height - 200), Content);
+            enemiesManager.Update(gameTime);            
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.DarkCyan);
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            // Desenha o personagem
-            player.animations.Draw(spriteBatch);
+            spriteBatch.Begin();
 
-            if (player.Deflected())
+            spriteBatch.Draw(background, Vector2.Zero, Color.White);
+
+            if (player.health <= 0)
             {
-                spriteBatch.DrawString(font, "DEFLECTED!" ,
-                new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y+30), Color.White);
-            
+                spriteBatch.DrawString(font, "YOU LOSE!",
+                new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + 30, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White, 0.0f, Vector2.Zero, 4.0f, SpriteEffects.None, 0);
             }
-            
-            enemiesManager.Draw(spriteBatch);
-            spriteBatch.DrawString(font, "Health: " + player.health, 
-                new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
-            
-            for(int i = 0; i < enemiesManager.enemies.Count; i++)
+            else
             {
-                spriteBatch.DrawString(font, "Enemy " + (i+1) + ": " + enemiesManager.enemies[i].health,
-                new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + GraphicsDevice.Viewport.Width - 300, 
-                    GraphicsDevice.Viewport.TitleSafeArea.Y + i*30), Color.White);
-                
+                // Desenha o personagem
+                player.animations.Draw(spriteBatch);
+
+                if (player.Deflected())
+                {
+                    spriteBatch.DrawString(font, "DEFLECTED!",
+                    new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
+
+                }
+
+                enemiesManager.Draw(spriteBatch);
+                spriteBatch.DrawString(font, "Health: " + player.health,
+                    new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + 30, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
+
+                for (int i = 0; i < enemiesManager.enemies.Count; i++)
+                {
+                    spriteBatch.DrawString(font, "Enemy " + (i + 1) + ": " + enemiesManager.enemies[i].health,
+                    new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + GraphicsDevice.Viewport.Width - 300,
+                        GraphicsDevice.Viewport.TitleSafeArea.Y + i * 30), Color.White);
+
+                }
             }
             spriteBatch.End();
 

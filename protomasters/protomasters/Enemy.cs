@@ -8,12 +8,6 @@ namespace protomasters
 {
     class Enemy : Entity
     {
-        public double inAction = 0.0;
-        public string inAttack = "";
-        public double meleeTime;
-        public int parryTime = 6000;
-        public int parryCount = 0;
-        private int parryMax = 3;
 
         public bool inDamage = false;
         public bool unparriable = false;
@@ -30,13 +24,22 @@ namespace protomasters
             int direction;
             TimeSpan delta = (DateTime.Now - startAction);
             inAction = Math.Max(0.0, inAction - delta.TotalMilliseconds);
-            if (inAction > 0.0)
+
+            Console.WriteLine(inAction);
+
+            if(check_attack(player))
+            {
+                enemyStr = player.strength;
+                damaged();
+            }
+            else if (inAction > 0.0)
                 animations.PlayAnimation(animations.AnimationKey);
             else if (this.animations.Rect().Intersects(player.animations.Rect()))
             {
                 if (parryCount >= parryMax)
                 {
                     broke();
+                    player.canAttack = true;
                 }
                 else if (inAttack == "")
                 {
@@ -53,6 +56,7 @@ namespace protomasters
                         inAttack = "Attack2";
                         this.animations.color = Color.Yellow;
                     }
+                    player.canAttack = true;
                     animations.PlayAnimation("Stoped" + getSense());
                 }
                 else if (inAction == 0.0)
@@ -76,7 +80,7 @@ namespace protomasters
                 this.animations.position.X += direction * speed;
 
                 if (this.animations.Rect().Intersects(player.animations.Rect()))
-                   animations.PlayAnimation("Stoped" + getSense());
+                    animations.PlayAnimation("Stoped" + getSense());
             }
 
             animations.old_position = animations.position;
@@ -92,27 +96,15 @@ namespace protomasters
             animations.PlayAnimation(inAttack + getSense());
             inAttack = "";
             unparriable = false;
-            this.animations.color = Color.Black;
+            this.animations.color = color;
             parryCount = 0;
+            player.canAttack = false;
         }
 
-        public void parried()
+        public bool check_attack(Player player)
         {
-            animations.PlayAnimation("Parried" + getSense());
-            inAttack = "";
-            inAction = 500.0;
-            this.animations.color = Color.Black;
-            startAction = DateTime.Now;
-            parryCount += 1;
-        }
-        public void broke()
-        {
-            animations.PlayAnimation("Broke" + getSense());
-            parryCount = 0;
-            inAttack = "";
-            inAction = 5500.0;
-            this.animations.color = Color.Black;
-            startAction = DateTime.Now;
+            return this.animations.Rect().Intersects(player.animations.Rect()) &&
+                   isBroke() && player.pressedAttack();
         }
 
     }
